@@ -1,4 +1,4 @@
-# Torn theme reference
+# Torn theme reference.
 
 Source: [Torn public homepage](https://www.torn.com/), captured and visually inspected on 2026-11-05 at a 1440 px desktop viewport. [Reference screenshot](docs/torn-home-reference.png). The public homepage was used because the tracker does not have an authenticated Torn page to reference. The screenshot showed a centered content column, dark textured top bar, light gray page surface, charcoal gradient panel headers, compact Arial labels, gray table rows, and a muted gold primary action.
 
