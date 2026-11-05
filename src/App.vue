@@ -14,6 +14,7 @@ import {
   Sheet,
 } from '@lucide/vue'
 import { applyTheme, isThemeStorageEvent, readTheme, saveTheme, type Theme } from './theme'
+import XanaxTicker from './components/XanaxTicker.vue'
 
 type RunsResponse = {
   success: boolean
@@ -349,7 +350,10 @@ async function copyCell(value: string, row: number, column: number) {
               <h2 id="ledger-title">Run ledger</h2>
               <p>All eight columns from your spreadsheet, including calculated values.</p>
             </div>
-            <span class="count">{{ rows.length }} {{ rows.length === 1 ? 'entry' : 'entries' }}</span>
+            <div class="ledger-header-status">
+              <XanaxTicker />
+              <span class="count">{{ rows.length }} {{ rows.length === 1 ? 'entry' : 'entries' }}</span>
+            </div>
           </div>
           <div v-if="theme !== 'discord'" class="toolbar">
             <label class="search-field">

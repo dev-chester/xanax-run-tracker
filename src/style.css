@@ -130,6 +130,11 @@ h1, h2, h3 { color: #303030; letter-spacing: -.035em; }
 .panel-heading { display: flex; justify-content: space-between; gap: 16px; padding: 25px 25px 21px; }
 .panel-heading h2 { margin: 8px 0 5px; font-size: 21px; }
 .panel-heading p { margin: 0; color: var(--muted); font-size: 13px; }
+.ledger-header-status { display: flex; align-items: center; justify-content: flex-end; gap: 18px; flex-wrap: wrap; }
+@media (max-width: 600px) {
+  .panel-heading { flex-wrap: wrap; }
+  .ledger-header-status { justify-content: flex-start; }
+}
 .count { height: max-content; padding: 6px 10px; border-radius: 999px; background: #e7e7e7; color: #555; font-size: 11px; font-weight: 650; white-space: nowrap; }
 .toolbar { display: flex; justify-content: space-between; gap: 12px; padding: 0 25px 20px; }
 .search-field { position: relative; display: flex; align-items: center; width: min(300px, 100%); }
@@ -612,7 +617,7 @@ html[data-theme="discord"] .discord-connected .panel {
   border-radius: 0;
   background: #313338;
 }
-html[data-theme="discord"] .discord-connected .panel-heading { align-items: end; padding: 20px 22px 16px; border-bottom: 1px solid #3f4147; }
+html[data-theme="discord"] .discord-connected .panel-heading { align-items: start; padding: 10px 22px; border-bottom: 1px solid #3f4147; }
 html[data-theme="discord"] .discord-connected .panel-heading .eyebrow { display: none; }
 html[data-theme="discord"] .discord-connected .panel-heading h2 { margin: 0 0 4px; font-size: 17px; letter-spacing: 0; }
 html[data-theme="discord"] .discord-connected .panel-heading p { font-size: 11px; }
@@ -690,7 +695,7 @@ html[data-theme="discord"] .feature { font-size: 12px; }
   html[data-theme="discord"] .discord-server-rail { display: none; }
   html[data-theme="discord"] .discord-connected .page-heading { padding: 10px 16px; }
   html[data-theme="discord"] .discord-connected .connection { padding-inline: 16px; }
-  html[data-theme="discord"] .discord-connected .panel-heading { padding: 18px 16px; }
+  html[data-theme="discord"] .discord-connected .panel-heading { padding: 10px 16px; }
   html[data-theme="discord"] .discord-connected .stats { padding: 18px 8px; }
   html[data-theme="discord"] .discord-connected .footnote { padding-inline: 16px; }
   html[data-theme="discord"] .theme-control select { min-width: 108px; }
