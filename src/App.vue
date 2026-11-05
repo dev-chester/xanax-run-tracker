@@ -138,7 +138,7 @@ function describeError(error: unknown): string {
 
 function applyRuns(result: RunsResponse) {
   headers.value = result.headers.length ? result.headers : defaultHeaders
-  rows.value = result.data
+  rows.value = result.data.filter((row) => String(row[0] ?? '').trim() !== '')
   lastUpdated.value = new Intl.DateTimeFormat(undefined, {
     hour: 'numeric', minute: '2-digit',
   }).format(new Date())
