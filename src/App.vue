@@ -100,6 +100,22 @@ function setCooldown(until: number) {
 }
 
 const latest = computed(() => rows.value.at(-1))
+const activeRestock = ref<number | 'latest' | null>(null)
+
+function restockUtcTime(value: string | undefined): string | undefined {
+  const match = value?.trim().match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM)?$/i)
+  if (!match) return undefined
+  let hour = Number(match[1])
+  const minute = Number(match[2])
+  const second = Number(match[3] ?? 0)
+  const period = match[4]?.toUpperCase()
+  if (minute > 59 || second > 59 || (period ? hour < 1 || hour > 12 : hour > 23)) return undefined
+  if (period) hour = hour % 12 + (period === 'PM' ? 12 : 0)
+  // Restock values are stored in Manila time (UTC+8).
+  const utcHour = (hour + 24 - 8) % 24
+  return `${String(utcHour).padStart(2, '0')}:${match[2]}${match[3] ? `:${match[3]}` : ''} UTC`
+}
+
 const filtered = computed(() => {
   const query = search.value.trim().toLowerCase()
   return rows.value
@@ -337,7 +353,7 @@ async function copyCell(value: string, row: number, column: number) {
             <span class="stat-icon latest" aria-hidden="true"><Plane :size="19" /></span>
           </div>
           <div class="stat">
-            <span>Latest restock</span><strong class="stat-date">{{ latest?.[7] || '—' }}</strong>
+            <span>Latest restock</span><strong class="stat-date" tabindex="0" @mouseenter="activeRestock = 'latest'" @mouseleave="activeRestock = null" @focus="activeRestock = 'latest'" @blur="activeRestock = null">{{ (activeRestock === 'latest' ? restockUtcTime(latest?.[7]) : latest?.[7]) || latest?.[7] || '—' }}</strong>
             <small>Time from the latest entry</small>
             <span class="stat-icon restock" aria-hidden="true"><Package :size="19" /></span>
           </div>
@@ -371,9 +387,13 @@ async function copyCell(value: string, row: number, column: number) {
               <thead><tr><th v-for="(header, index) in headers" :key="index" scope="col">{{ header }}</th></tr></thead>
               <tbody>
                 <tr v-for="item in filtered" :key="item.row">
-                  <td v-for="(_, index) in headers" :key="index" :class="{ 'date-cell': index === 0, calculated: [3, 5, 6].includes(index) }">
+                  <td v-for="(_, index) in headers" :key="index" :tabindex="index === 7 && restockUtcTime(item.cells[index]) ? 0 : undefined" :class="{ 'date-cell': index === 0, calculated: [3, 5, 6].includes(index) }" @mouseenter="index === 7 && (activeRestock = item.row)" @mouseleave="activeRestock = null" @focus="index === 7 && (activeRestock = item.row)" @blur="activeRestock = null">
                     <span class="cell-content">
-                      <span>{{ item.cells[index] || '—' }}</span>
+                      <span v-if="index === 7" class="restock-time" :class="{ 'show-utc': activeRestock === item.row }">
+                        <span class="restock-original">{{ item.cells[index] || '—' }}</span>
+                        <span class="restock-utc">{{ restockUtcTime(item.cells[index]) || item.cells[index] || '—' }}</span>
+                      </span>
+                      <span v-else>{{ item.cells[index] || '—' }}</span>
                       <button
                         v-if="copyableColumns.has(index) && item.cells[index]"
                         class="copy-button"
